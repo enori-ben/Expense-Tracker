@@ -1,25 +1,19 @@
-package com.example.expensetracker.view
+package com.example.expensetracker.view.mainscreen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,28 +21,31 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.expensetracker.R
 import com.example.expensetracker.navigation.NavItem
-import com.example.expensetracker.repository.Routes
+import com.example.expensetracker.view.DrawerScreen
+import com.example.expensetracker.view.HomeScreen
+import com.example.expensetracker.view.Scanning
+import com.example.expensetracker.view.StatsScreen
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(navController: NavController) {
+    val viewModel: MainViewModel = viewModel()
     val navItems = listOf(
         NavItem("Home", painterResource(R.drawable.home)),
-        NavItem("Add", painterResource(R.drawable.add)),
+        NavItem("Scan", painterResource(R.drawable.scanning)),
         NavItem("Stats", painterResource(R.drawable.st))
     )
-    var selectedIndex by remember { mutableIntStateOf(0) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -80,49 +77,68 @@ fun MainScreen(navController: NavController) {
                     NavigationBar(containerColor = Color.Black) {
                         navItems.forEachIndexed { index, item ->
                             NavigationBarItem(
-                                selected = selectedIndex == index,
-                                onClick = { selectedIndex = index },
+                                selected = viewModel.selectedIndex == index,
+                                onClick = { viewModel.updateIndex(index) },
                                 icon = {
                                     Icon(
                                         painter = item.icon,
                                         contentDescription = item.label,
-                                        modifier = Modifier.size(38.dp)
+                                        modifier = Modifier.size(38.dp),
+                                        tint = if (viewModel.selectedIndex == index)
+                                        Color(0xFFFFBB0C) else Color.Gray
                                     )
-                                },
-                                colors = NavigationBarItemDefaults.colors(
-                                    selectedIconColor = Color(0xFFFFBB0C),
-                                    unselectedIconColor = Color.White
-                                )
+                                }
+
                             )
                         }
                     }
                 }
             }
         ) { innerPadding ->
-            ContentScreen(
-                modifier = Modifier.padding(innerPadding),
-                selectedIndex = selectedIndex,
-                navController = navController,
-                onMenuClick = { scope.launch { drawerState.open() } }
-            )
+            when (viewModel.selectedIndex) {
+                0 -> HomeScreen(
+                    modifier = Modifier.padding(innerPadding),
+                    navController = navController,
+                    onMenuClick = { scope.launch { drawerState.open() } }
+                )
+                1 -> Scanning(navController)
+                2 -> StatsScreen(navController)
+            }
         }
     }
 }
 
-@Composable
-fun ContentScreen(
-    modifier: Modifier = Modifier,
-    selectedIndex: Int,
-    navController: NavController,
-    onMenuClick: () -> Unit
-) {
-    when (selectedIndex) {
-        0 -> HomeScreen(
-            navController = navController,
-            onMenuClick = onMenuClick
-        )
-        1 -> AddScreen()
-        2 -> StatsScreen()
-    }
-}
 
+
+//        Scaffold(
+//            bottomBar = {
+//                NavigationBar(containerColor = MaterialTheme.colorScheme.background) {
+//                    navItems.forEachIndexed { index, item ->
+//                        NavigationBarItem(
+//                            selected = viewModel.selectedIndex == index,
+//                         onClick = { viewModel.updateIndex(index) },
+//                            icon = {
+//                                Icon(
+//                                    painter = item.icon,
+//                                    contentDescription = item.label,
+//                                    tint = if (viewModel.selectedIndex == index)
+//                                        Color(0xFFFFBB0C) else Color.Gray
+//                                )
+//                            }
+//                        )
+//                    }
+//                }
+//            }
+//        ) { innerPadding ->
+//            when (viewModel.selectedIndex) {
+//                0 -> HomeScreen(
+//                    modifier = Modifier.padding(innerPadding),
+//                    navController = navController,
+//                    onMenuClick = { scope.launch { drawerState.open() } }
+//                )
+//                1 -> Scanning(navController)
+//                2 -> StatsScreen(navController)
+//            }
+//        }
+//    }
+//}
