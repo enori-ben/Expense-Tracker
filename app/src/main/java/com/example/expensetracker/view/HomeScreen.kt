@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -46,14 +47,12 @@ import java.util.Locale
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
-    navController: NavController,
-    onProfileClick: () -> Unit = { navController.navigate(Routes.PROFILE_SCREEN) },
-    onMenuClick: () -> Unit = {},
     modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: TransactionViewModel,
+    onProfileClick: () -> Unit = { navController.navigate(Routes.PROFILE_SCREEN) },
+    onMenuClick: () -> Unit = {}
 ) {
-    val viewModel: TransactionViewModel = viewModel(key = "shared_transaction_vm")
-
-
     // State variables
     val transactions by viewModel.transactions.collectAsStateWithLifecycle()
     val totalBalance by viewModel.totalBalance.collectAsStateWithLifecycle()
@@ -62,19 +61,21 @@ fun HomeScreen(
 
     // Debugging
     LaunchedEffect(transactions) {
-        println("Transactions updated: ${transactions.size}")
-        println("Current balance: $totalBalance")
+        println("HomeScreen - Transactions updated: ${transactions.size}")
+        println("HomeScreen - Current balance: $totalBalance")
+        println("HomeScreen - Total income: $totalIncome")
+        println("HomeScreen - Total expense: $totalExpense")
     }
 
-    // 3. UI State variables
+    // UI State variables
     var selectedPeriod by remember { mutableStateOf("Day") }
     var currentDate by remember { mutableStateOf(LocalDate.now()) }
 
-    // 4. Formatters
+    // Formatters
     val dateFormatter = remember { DateTimeFormatter.ofPattern("dd MMM yyyy") }
     val dailyFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d MMM") }
 
-    // 5. Filtered transactions
+    // Filtered transactions
     val filteredTransactions = remember(transactions, selectedPeriod, currentDate) {
         when (selectedPeriod) {
             "Day" -> transactions.filter { it.date == currentDate }
@@ -92,7 +93,6 @@ fun HomeScreen(
             else -> transactions
         }
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -149,13 +149,29 @@ fun HomeScreen(
                 }
             }
 
+
+
+
+
+        }
+        Box(modifier = Modifier.fillMaxSize().padding(top = 600.dp)){
             // Floating Action Button
+            FAB(navController)
+        }
+
+    }
+
+
+}
+
+@Composable
+fun FAB(navController: NavController) {
+
             FloatingActionButton(
                 onClick = {
                     navController.navigate(Routes.ADD_TRANSACTION)
                 },
-                modifier = Modifier
-                    .padding(24.dp)
+                modifier = Modifier.padding(24.dp)
                     .shadow(
                         elevation = 8.dp,
                         shape = CircleShape,
@@ -172,8 +188,8 @@ fun HomeScreen(
                 )
             }
 
-        }
-    }
+
+
 
 }
 
@@ -227,6 +243,8 @@ private fun HeaderSection(
     onMenuClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
+    Spacer(modifier = Modifier.height(16.dp))
+
     Row(
         modifier = Modifier
             .fillMaxWidth()

@@ -99,6 +99,7 @@ fun MainScreen(navController: NavController) {
                 0 -> HomeScreen(
                     modifier = Modifier.padding(innerPadding),
                     navController = navController,
+                    viewModel = viewModel(),
                     onMenuClick = { scope.launch { drawerState.open() } }
                 )
                 1 -> Scanning(navController)
