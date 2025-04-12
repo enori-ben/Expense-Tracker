@@ -139,8 +139,8 @@ fun AddTran(navController: NavController, viewModel: TransactionViewModel) {
                     category = selectedCategory,
                     date = selectedDate
                 )
-                navController.popBackStack()
-                navController.navigate(Routes.HOME_SCREEN) {
+                //navController.popBackStack()
+                navController.navigate(Routes.MAIN_SCREEN) {
                     launchSingleTop = true
                     restoreState = true
                 }

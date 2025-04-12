@@ -22,8 +22,7 @@ import com.example.expensetracker.view.transaction.TransactionViewModel
 @Composable
 fun StatsScreen(
     navController: NavController,
-    modifier: Modifier = Modifier,
-    viewModel: TransactionViewModel = viewModel()
+    viewModel: TransactionViewModel
 ) {
     val totalIncome by viewModel.totalIncome.collectAsStateWithLifecycle()
     val totalExpense by viewModel.totalExpense.collectAsStateWithLifecycle()

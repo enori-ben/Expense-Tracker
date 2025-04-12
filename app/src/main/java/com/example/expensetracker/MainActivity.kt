@@ -14,14 +14,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.expensetracker.repository.Routes
-import com.example.expensetracker.repository.Routes.HOME_SCREEN
 import com.example.expensetracker.screens.SignInScreen
 import com.example.expensetracker.screens.SignUpScreen
 import com.example.expensetracker.screens.Splashscreen
 import com.example.expensetracker.ui.theme.ExpenseTrackerTheme
 import com.example.expensetracker.view.AboutScreen
 import com.example.expensetracker.view.HelpScreen
-import com.example.expensetracker.view.HomeScreen
 import com.example.expensetracker.view.transaction.AddTran
 import com.example.expensetracker.view.Scanning
 import com.example.expensetracker.view.mainscreen.MainScreen
@@ -48,35 +46,26 @@ class MainActivity : ComponentActivity() {
                     composable(Routes.SPLASH_SCREEN) { Splashscreen(navController) }
                     composable(Routes.SIGN_IN_SCREEN) { SignInScreen(navController) }
                     composable(Routes.SIGN_UP_SCREEN) { SignUpScreen(navController) }
-                    composable(Routes.MAIN_SCREEN) { MainScreen(navController) }
+                    composable(Routes.MAIN_SCREEN) { MainScreen(navController, transactionViewModel) }
                     composable(Routes.PROFILE_SCREEN) { ProfileScreen(navController) }
                     composable(Routes.ADD_TRANSACTION) { AddTran(navController, transactionViewModel) }
-                    composable(Routes.HOME_SCREEN) { HomeScreen(modifier = Modifier, navController, transactionViewModel) }
                     composable(Routes.SCANNING_SCREEN) { Scanning(navController) }
-                    composable(Routes.STATS_SCREEN) { StatsScreen(navController) }
+                    composable(Routes.STATS_SCREEN) { StatsScreen(navController,transactionViewModel) }
                     composable(Routes.SETTINGS_SCREEN) { SettingScreen(navController) }
                     composable(Routes.HELP_SCREEN) { HelpScreen(navController) }
                     composable(Routes.ABOUT_SCREEN) { AboutScreen(navController) }
                     composable(Routes.CREATE_CATEGORY) { CreateCategoryScreen(navController) }
-
-                    // ... داخل NavHost الثاني
-
-
-
-                    }
-
+                }
             }
         }
     }
 
-
-
-@Preview(showBackground = true)
-@Composable
-fun MainPreview() {
-    ExpenseTrackerTheme {
-        val navController = rememberNavController()
-        Splashscreen(navController)
+    @Preview(showBackground = true)
+    @Composable
+    fun MainPreview() {
+        ExpenseTrackerTheme {
+            val navController = rememberNavController()
+            Splashscreen(navController)
+        }
     }
-}
 }
