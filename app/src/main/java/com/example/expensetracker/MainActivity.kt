@@ -8,7 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,13 +19,13 @@ import com.example.expensetracker.screens.Splashscreen
 import com.example.expensetracker.ui.theme.ExpenseTrackerTheme
 import com.example.expensetracker.view.AboutScreen
 import com.example.expensetracker.view.HelpScreen
-import com.example.expensetracker.view.transaction.AddTran
 import com.example.expensetracker.view.Scanning
 import com.example.expensetracker.view.mainscreen.MainScreen
 import com.example.expensetracker.view.ProfileScreen
 import com.example.expensetracker.view.SettingScreen
-import com.example.expensetracker.view.StatsScreen
-import com.example.expensetracker.view.transaction.CreateCategoryScreen
+import com.example.expensetracker.view.mainscreen.MainViewModel
+import com.example.expensetracker.view.stats.StatsScreen
+import com.example.expensetracker.view.transaction.AddTran
 import com.example.expensetracker.view.transaction.TransactionViewModel
 
 class MainActivity : ComponentActivity() {
@@ -49,12 +48,15 @@ class MainActivity : ComponentActivity() {
                     composable(Routes.MAIN_SCREEN) { MainScreen(navController, transactionViewModel) }
                     composable(Routes.PROFILE_SCREEN) { ProfileScreen(navController) }
                     composable(Routes.ADD_TRANSACTION) { AddTran(navController, transactionViewModel) }
-                    composable(Routes.SCANNING_SCREEN) { Scanning(navController) }
+                    composable(Routes.SCANNING_SCREEN) { Scanning(
+//                            onClose = { navController.popBackStack() },
+//                        onConfirm = { /* Handle confirmation */ },
+                        navController = navController
+                        )  }
                     composable(Routes.STATS_SCREEN) { StatsScreen(navController,transactionViewModel) }
                     composable(Routes.SETTINGS_SCREEN) { SettingScreen(navController) }
                     composable(Routes.HELP_SCREEN) { HelpScreen(navController) }
                     composable(Routes.ABOUT_SCREEN) { AboutScreen(navController) }
-                    composable(Routes.CREATE_CATEGORY) { CreateCategoryScreen(navController) }
                 }
             }
         }

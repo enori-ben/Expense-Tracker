@@ -35,11 +35,11 @@ fun CategoryItem(
             // الحالة المختارة: عرض مربع يحتوي على الصورة والنص معًا
             Box(
                 modifier = Modifier
-                    .size(90.dp)
+                    .size(95.dp)
                     .clickable { onClick() }
                     .background(
                         color = Color.LightGray,
-                        shape = RoundedCornerShape(6.dp)
+                        shape = RoundedCornerShape(10.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {

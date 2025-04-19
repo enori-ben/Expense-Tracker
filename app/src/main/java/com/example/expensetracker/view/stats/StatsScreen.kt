@@ -1,7 +1,9 @@
-package com.example.expensetracker.view
+package com.example.expensetracker.view.stats
+
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -10,13 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.expensetracker.view.transaction.TransactionViewModel
 
 @Composable
@@ -50,7 +52,6 @@ fun ActualStatsScreen(
     totalBalance: Double,
     modifier: Modifier = Modifier
 ) {
-    Spacer(modifier = Modifier.height(16.dp))
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,15 +74,25 @@ fun ActualStatsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFC8E6C9)), // Light green for income
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFC8E6C9)), // Light green
             shape = RoundedCornerShape(12.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Total Income", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Color.Black)
-                Text("%.2f DZ".format(totalIncome), fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFF4CAF50))
+                Text(
+                    text = "Total Income",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Black
+                )
+                Text(
+                    text = "%.2f DZ".format(totalIncome),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF4CAF50)
+                )
             }
         }
 
@@ -90,15 +101,25 @@ fun ActualStatsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFCDD2)), // Light red for expenses
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFCDD2)), // Light red
             shape = RoundedCornerShape(12.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Total Expenses", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Color.Black)
-                Text("%.2f DZ".format(totalExpense), fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFFF44336))
+                Text(
+                    text = "Total Expenses",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Black
+                )
+                Text(
+                    text = "%.2f DZ".format(totalExpense),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFFF44336)
+                )
             }
         }
 
@@ -107,28 +128,42 @@ fun ActualStatsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFBBDEFB)), // Light blue for balance
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFBBDEFB)), // Light blue
             shape = RoundedCornerShape(12.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Remaining Balance", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Color.Black)
-                Text("%.2f DZ".format(totalBalance), fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1976D2))
+                Text(
+                    text = "Remaining Balance",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Black
+                )
+                Text(
+                    text = "%.2f DZ".format(totalBalance),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1976D2)
+                )
             }
         }
 
-        // Placeholder for Graph
+        // Circle instead of Graph Placeholder
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
+                .size(200.dp) // حجم الدائرة
                 .padding(vertical = 16.dp)
-                .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(12.dp)),
+                .clip(CircleShape) // قص إلى دائرة
+                .background(Color(0xFFE0E0E0)), // لون خلفية الدائرة
             contentAlignment = Alignment.Center
         ) {
-            Text("Graph Placeholder", color = Color.Gray, fontSize = 16.sp)
+            Text(
+                text = "Graph Here",
+                color = Color.Gray,
+                fontSize = 16.sp
+            )
         }
     }
 }

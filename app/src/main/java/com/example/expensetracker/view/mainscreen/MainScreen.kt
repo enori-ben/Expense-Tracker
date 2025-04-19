@@ -33,13 +33,12 @@ import com.example.expensetracker.navigation.NavItem
 import com.example.expensetracker.repository.Routes
 import com.example.expensetracker.view.DrawerScreen
 import com.example.expensetracker.view.Scanning
-import com.example.expensetracker.view.StatsScreen
+import com.example.expensetracker.view.stats.StatsScreen
 import com.example.expensetracker.view.transaction.Transaction
 import com.example.expensetracker.view.transaction.TransactionViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import com.example.expensetracker.view.HomeScreen
 import kotlinx.coroutines.CoroutineScope
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -90,7 +89,7 @@ fun MainScreen(navController: NavController, transactionViewModel: TransactionVi
                                         contentDescription = item.label,
                                         modifier = Modifier.size(38.dp),
                                         tint = if (viewModel.selectedIndex == index)
-                                        Color(0xFFFFBB0C) else Color.Gray
+                                            Color(0xFFFFBB0C) else Color.Gray
                                     )
                                 }
 

@@ -167,26 +167,26 @@ fun HomeScreen(
 @Composable
 fun FAB(navController: NavController) {
 
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(Routes.ADD_TRANSACTION)
-                },
-                modifier = Modifier.padding(24.dp)
-                    .shadow(
-                        elevation = 8.dp,
-                        shape = CircleShape,
-                        spotColor = Color.Black.copy(alpha = 0.3f)
-                    ),
-                containerColor = Color(0xFFFFBB0C),
+    FloatingActionButton(
+        onClick = {
+            navController.navigate(Routes.ADD_TRANSACTION)
+        },
+        modifier = Modifier.padding(24.dp)
+            .shadow(
+                elevation = 8.dp,
                 shape = CircleShape,
-                contentColor = Color.Black
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.add),
-                    contentDescription = "Add Transaction",
-                    modifier = Modifier.size(32.dp)
-                )
-            }
+                spotColor = Color.Black.copy(alpha = 0.3f)
+            ),
+        containerColor = Color(0xFFFFBB0C),
+        shape = CircleShape,
+        contentColor = Color.Black
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.add),
+            contentDescription = "Add Transaction",
+            modifier = Modifier.size(32.dp)
+        )
+    }
 
 
 

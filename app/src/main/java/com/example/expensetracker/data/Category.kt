@@ -15,11 +15,7 @@ val categories = listOf(
     Category("Education", R.drawable.ic_edu),
     Category("Gifts", R.drawable.ic_gifts),
     Category("Transport", R.drawable.ic_transport),
-    Category("Create", R.drawable.plus),
-    Category("Education", R.drawable.ic_edu),
-    Category("Gifts", R.drawable.ic_gifts),
-    Category("Transport", R.drawable.ic_transport),
-    Category("Create", R.drawable.plus)
+    Category("Other", R.drawable.other),
 
 )
 

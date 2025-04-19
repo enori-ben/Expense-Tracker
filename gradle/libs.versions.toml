@@ -1,35 +1,104 @@
 [versions]
-agp = "8.8.0"
+agp = "8.8.2"
+cameraCoreVersion = "1.3.0"
+cameraLifecycleVersion = "1.3.0"
+cameraViewVersion = "1.3.0"
+anychart = "1.1.5"
+multidex = "2.0.1"
 kotlin = "2.0.0"
-coreKtx = "1.15.0"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
-activityCompose = "1.10.0"
-composeBom = "2024.04.01"
+activityCompose = "1.10.1"
+composeBom = "2025.04.00"
 hiltVersion = "2.51.1"
 hiltNavigation = "1.2.0"
 kaptVersion = "2.1.10"
-navigatinCompose = "2.8.7"
+multidexVersion = "2.0.1"
+navigatinCompose = "2.8.9"
 gms = "4.4.2"
-firebase = "33.9.0"
-firestore = "25.1.2"
+firebase = "33.12.0"
+firestore = "25.1.3"
 auth = "23.2.0"
-analytics  = "22.2.0"
+analytics  = "22.4.0"
 firebaseDatabase = "21.0.0"
-roomCommon = "2.6.1"
-roomKtx = "2.6.1"
+roomCommon = "2.7.0"
+roomKtx = "2.7.0"
 constraintlayoutCore = "1.1.1"
+firebaseAuth = "23.2.0"
+
+
+
+coilCompose = "2.6.0"
+converterGson = "2.11.0"
+coreSplashscreen = "1.0.1"
+
+kotlinxSerializationJsonVersion = "1.7.3"
+cameraLifecycle = "1.4.1"
+cameraCore = "1.4.1"
+cameraView = "1.4.1"
+loggingInterceptor = "4.9.3"
+navigationComposeVersion = "2.8.8"
+opencvAndroid = "4.5.1"
+opencvAndroidVersion = "4.5.5"
+retrofit = "2.11.0"
+
+textRecognition = "16.0.1"
+tinkAndroid = "1.8.0"
+visionCommon = "17.3.0"
+playServicesMlkitTextRecognitionCommon = "19.1.0"
+playServicesMlkitTextRecognition = "19.0.1"
+runtimeLivedata = "1.7.8"
+places = "4.1.0"
+datastoreCoreAndroid = "1.1.3"
+objectDetectionCommon = "18.0.0"
+generativeai = "0.9.0"
+firebaseFirestore = "25.1.3"
+
 
 [libraries]
+
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCoreVersion" }
+androidx-camera-core-v130 = { module = "androidx.camera:camera-core", version.ref = "cameraCoreVersion" }
+androidx-camera-lifecycle-v130 = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraLifecycleVersion" }
+androidx-camera-view-v130 = { module = "androidx.camera:camera-view", version.ref = "cameraViewVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-navigation-compose-v280 = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
+
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycle" }
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraCore" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraView" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+opencv-android = { module = "org.opencv:opencv-android", version.ref = "opencvAndroidVersion" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "textRecognition" }
+vision-common = { group = "com.google.mlkit", name = "vision-common", version.ref = "visionCommon" }
+play-services-mlkit-text-recognition-common = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-common", version.ref = "playServicesMlkitTextRecognitionCommon" }
+play-services-mlkit-text-recognition = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition", version.ref = "playServicesMlkitTextRecognition" }
+androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
+androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
+object-detection-common = { group = "com.google.mlkit", name = "object-detection-common", version.ref = "objectDetectionCommon" }
+generativeai = { group = "com.google.ai.client.generativeai", name = "generativeai", version.ref = "generativeai" }
+
+
+
+
+anychart-android = {group = "com.github.AnyChart",name = "AnyChart-Android", version.ref = "anychart" }
+support-multidex = {group = "com.android.support", name = "multidex", version.ref = "multidex" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
@@ -39,7 +108,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-io-coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.4.0" }
+io-coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.5.0" }
 
 dagger-hilt = {group = "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion"}
 dagger-hilt-compiler = {group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltVersion"}
@@ -55,6 +124,8 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 androidx-constraintlayout-core = { group = "androidx.constraintlayout", name = "constraintlayout-core", version.ref = "constraintlayoutCore" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
