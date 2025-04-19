@@ -19,7 +19,6 @@ import com.example.expensetracker.screens.Splashscreen
 import com.example.expensetracker.ui.theme.ExpenseTrackerTheme
 import com.example.expensetracker.view.AboutScreen
 import com.example.expensetracker.view.HelpScreen
-import com.example.expensetracker.view.Scanning
 import com.example.expensetracker.view.mainscreen.MainScreen
 import com.example.expensetracker.view.ProfileScreen
 import com.example.expensetracker.view.SettingScreen
@@ -27,6 +26,7 @@ import com.example.expensetracker.view.mainscreen.MainViewModel
 import com.example.expensetracker.view.stats.StatsScreen
 import com.example.expensetracker.view.transaction.AddTran
 import com.example.expensetracker.view.transaction.TransactionViewModel
+import com.example.policeplus.views.Scanning
 
 class MainActivity : ComponentActivity() {
     private val transactionViewModel: TransactionViewModel by viewModels()
@@ -49,9 +49,8 @@ class MainActivity : ComponentActivity() {
                     composable(Routes.PROFILE_SCREEN) { ProfileScreen(navController) }
                     composable(Routes.ADD_TRANSACTION) { AddTran(navController, transactionViewModel) }
                     composable(Routes.SCANNING_SCREEN) { Scanning(
-//                            onClose = { navController.popBackStack() },
-//                        onConfirm = { /* Handle confirmation */ },
-                        navController = navController
+                            onClose = { navController.popBackStack() },
+                        onConfirm = { /* Handle confirmation */ },
                         )  }
                     composable(Routes.STATS_SCREEN) { StatsScreen(navController,transactionViewModel) }
                     composable(Routes.SETTINGS_SCREEN) { SettingScreen(navController) }
