@@ -47,12 +47,9 @@ import com.example.expensetracker.repository.Routes
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AddTran(navController: NavController) {
+fun AddTran(navController: NavController, viewModel: TransactionViewModel) {
 
-    val viewModel: TransactionViewModel = viewModel()
-    println("ViewModel instance: $viewModel")
 
-    // حالات التطبيق
     val focusManager = LocalFocusManager.current
     var selectedCategory by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
@@ -67,8 +64,7 @@ fun AddTran(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray)
-            .clickable { focusManager.clearFocus() }
+            .background(Color(0xFFF5F6FA))
             .verticalScroll(rememberScrollState())
     ) {
         // Header Section
@@ -86,6 +82,8 @@ fun AddTran(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 45.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween,
+
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
@@ -208,14 +206,10 @@ fun AddTran(navController: NavController) {
             CategoryGrid(
                 categories = categories,
                 selectedCategory = selectedCategory,
-                onCategorySelected = { newCategory ->
-                    if (newCategory == "Create") {
-                        navController.navigate(Routes.CREATE_CATEGORY)
-                    } else {
-                        selectedCategory = newCategory
-                    }
+                onCategorySelected = { selectedCategory = it
                 }
             )
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
 
@@ -230,23 +224,15 @@ fun AddTran(navController: NavController) {
             onClick = {
                 focusManager.clearFocus() // إخفاء لوحة المفاتيح
 
-                val amountValue = amount.toDoubleOrNull() ?: run {
-                    println("خطأ: المبلغ غير صحيح")
-                    return@Button
-                }
+                val amountValue = amount.toDoubleOrNull() ?: return@Button
                 viewModel.addTransaction(
                     amount = amountValue,
                     isExpense = transactionType == "EXPENSE",
                     category = selectedCategory,
                     date = selectedDate
                 )
-
-                // استبدل هذا:
-                // navController.popBackStack()
-
-                // بهذا الحل الأفضل:
-                navController.popBackStack()
-                navController.navigate(Routes.HOME_SCREEN) {
+//                navController.popBackStack()
+                navController.navigate(Routes.MAIN_SCREEN) {
                     // هذه الإعدادات تضمان إعادة إنشاء HomeScreen
                     launchSingleTop = true
                     restoreState = true

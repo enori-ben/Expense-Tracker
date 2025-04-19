@@ -42,15 +42,15 @@ fun IconSelectionItem(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
-        Image(
-            painter = painterResource(id = iconRes),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(8.dp)
-                .size(40.dp)
-        )
-    }
+            Image(
+                painter = painterResource(id = iconRes),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(40.dp)
+            )
         }
+    }
 }
 
 @Composable

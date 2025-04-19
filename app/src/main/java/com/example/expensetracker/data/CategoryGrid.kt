@@ -30,7 +30,7 @@ fun CategoryGrid (
                 isSelected = (selectedCategory == category.name),
                 onClick = { onCategorySelected(category.name) },
 
-            )
+                )
 
 
 

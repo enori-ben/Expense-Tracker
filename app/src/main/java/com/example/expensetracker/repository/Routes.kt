@@ -12,7 +12,6 @@ object Routes {
     const val SETTINGS_SCREEN = "settings"
     const val HELP_SCREEN = "help"
     const val ABOUT_SCREEN = "about"
-    const val CREATE_CATEGORY = "create_category"
     const val HOME_SCREEN = "home"
-
+    const val EDIT_PROFILE = "edit_profile"
 }

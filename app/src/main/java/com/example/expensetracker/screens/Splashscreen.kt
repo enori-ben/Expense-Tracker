@@ -2,6 +2,7 @@ package com.example.expensetracker.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +33,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.expensetracker.R
 import com.example.expensetracker.repository.Routes
 import com.example.expensetracker.ui.theme.DefaultAnimationSpec
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.height
 
 
 @Composable
@@ -41,13 +46,20 @@ fun Splashscreen(navController: NavController) {
             .fillMaxSize()
             .background(Color(0xA8B0A04E))
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+
         Text(
             text = "Expense\nTracker",
             modifier = Modifier
-                .align(Alignment.TopCenter)
                 .padding(top = 100.dp),
             style = TextStyle(
-                fontSize = 60.sp,
+                fontSize = 55.sp,
                 fontFamily = FontFamily(Font(R.font.item)),
                 color = Color.Black,
                 shadow = Shadow(
@@ -61,23 +73,21 @@ fun Splashscreen(navController: NavController) {
 
         )
 
-        Box(
-            modifier = Modifier
-                .size(300.dp)
-                .align(Alignment.CenterEnd)
-                .background(Color.Transparent)
+            Spacer(modifier = Modifier.height(42.dp))
 
 
-        ) {
+
             Image(
                 painter = painterResource(id = R.drawable.ic_expense_tracker),
                 contentDescription = "Logo",
-                modifier = Modifier.size(280.dp),
+                modifier = Modifier.size(320.dp)
+                    .aspectRatio(1f)
+                    .padding(start = 62.dp),
                 contentScale = ContentScale.Fit,
             )
-        }
 
 
+            Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = {
                 navController.navigate(Routes.SIGN_IN_SCREEN) {
@@ -87,7 +97,6 @@ fun Splashscreen(navController: NavController) {
             },
 
             modifier = Modifier
-                .align(Alignment.BottomCenter)
                 .padding(bottom = 180.dp, start = 100.dp, end = 100.dp)
                 .fillMaxWidth()
                 .size(50.dp)
@@ -105,8 +114,11 @@ fun Splashscreen(navController: NavController) {
                 fontSize = 16.sp,
                 color = Color.White
             )
+            Spacer(modifier = Modifier.height(32.dp))
+
         }
-    }
+
+        }}
 }
 
 @Preview
