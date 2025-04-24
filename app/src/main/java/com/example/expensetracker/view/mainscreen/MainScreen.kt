@@ -32,14 +32,19 @@ import com.example.expensetracker.R
 import com.example.expensetracker.navigation.NavItem
 import com.example.expensetracker.repository.Routes
 import com.example.expensetracker.view.DrawerScreen
+<<<<<<< HEAD
 import com.example.expensetracker.view.scan.Scanning
+=======
+>>>>>>> 242b99d42569f9ea70fc42011200e9663bb41699
 import com.example.expensetracker.view.stats.StatsScreen
 import com.example.expensetracker.view.transaction.Transaction
 import com.example.expensetracker.view.transaction.TransactionViewModel
+import com.example.policeplus.views.Scanning
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.CoroutineScope
+import java.time.DayOfWeek
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -114,8 +119,15 @@ fun MainScreen(navController: NavController, transactionViewModel: TransactionVi
                     scope = scope,
                     drawerState = drawerState
                 )
+<<<<<<< HEAD
                 1 -> Scanning(  onClose = { navController.navigate(Routes.MAIN_SCREEN) },
                     onConfirm = {navController.navigate(Routes.MAIN_SCREEN) })
+=======
+                1 -> Scanning(
+                    onClose = { navController.navigate(Routes.MAIN_SCREEN) },
+                    onConfirm = {navController.navigate(Routes.MAIN_SCREEN) }
+                )
+>>>>>>> 242b99d42569f9ea70fc42011200e9663bb41699
                 2 -> StatsScreen(navController,transactionViewModel)
             }
         }
@@ -152,7 +164,7 @@ private fun HomeScreenContent(
         when (selectedPeriod) {
             "Day" -> transactions.filter { it.date == currentDate }
             "Week" -> {
-                val startOfWeek = currentDate.with(java.time.DayOfWeek.MONDAY)
+                val startOfWeek = currentDate.with(DayOfWeek.MONDAY)
                 val endOfWeek = startOfWeek.plusDays(6)
                 transactions.filter { it.date in startOfWeek..endOfWeek }
             }
@@ -215,7 +227,9 @@ private fun HomeScreenContent(
             }
         }
 
-        Box(modifier = Modifier.fillMaxSize().padding(top = 600.dp)){
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 600.dp)){
             // Floating Action Button
             FAB(navController)
         }
@@ -425,7 +439,8 @@ fun FAB(navController: NavController) {
         onClick = {
             navController.navigate(Routes.ADD_TRANSACTION)
         },
-        modifier = Modifier.padding(24.dp)
+        modifier = Modifier
+            .padding(24.dp)
             .shadow(
                 elevation = 8.dp,
                 shape = CircleShape,
