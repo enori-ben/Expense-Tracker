@@ -47,6 +47,8 @@ android {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
     implementation ("androidx.compose.material3:material3:1.3.2")
@@ -68,6 +70,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.core)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation(libs.generativeai)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -104,6 +107,8 @@ dependencies {
 
     //Navigation compose
     implementation(libs.androidx.navigation.compose)
+
+    implementation("com.google.android.gms:play-services-location:21.1.0")
 
     //firebase
 

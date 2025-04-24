@@ -1,42 +1,47 @@
 package com.example.expensetracker.view.stats
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.expensetracker.R
 import com.example.expensetracker.view.transaction.TransactionViewModel
+import androidx.compose.ui.graphics.Color
 
+
+/**
+ * Stats Screen displays financial overview including income, expenses, and balance.
+ *
+ * @param navController Navigation controller for handling navigation
+ * @param viewModel ViewModel that provides financial data
+ */
 @Composable
 fun StatsScreen(
     navController: NavController,
     viewModel: TransactionViewModel
 ) {
+    // Collect financial data from ViewModel
     val totalIncome by viewModel.totalIncome.collectAsStateWithLifecycle()
     val totalExpense by viewModel.totalExpense.collectAsStateWithLifecycle()
     val totalBalance by viewModel.totalBalance.collectAsStateWithLifecycle()
 
+    // Main content layout
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        ActualStatsScreen(
-            navController = navController,
+        StatsContent(
             totalIncome = totalIncome,
             totalExpense = totalExpense,
             totalBalance = totalBalance
@@ -44,126 +49,158 @@ fun StatsScreen(
     }
 }
 
+/**
+ * Main content layout for Stats Screen
+ *
+ * @param totalIncome Total income value
+ * @param totalExpense Total expenses value
+ * @param totalBalance Current balance value
+ */
 @Composable
-fun ActualStatsScreen(
-    navController: NavController,
+private fun StatsContent(
     totalIncome: Double,
     totalExpense: Double,
-    totalBalance: Double,
-    modifier: Modifier = Modifier
+    totalBalance: Double
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F6FA)) // App background color
             .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header
+        // Screen title
         Text(
-            text = "Statistics",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF333333), // App primary text color
-            modifier = Modifier.padding(bottom = 16.dp)
+            text = stringResource(R.string.stats_title),
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.primary
         )
 
-        // Income Card
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFC8E6C9)), // Light green
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Total Income",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black
-                )
-                Text(
-                    text = "%.2f DZ".format(totalIncome),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF4CAF50)
-                )
-            }
-        }
+        // Financial cards
+        FinancialCardsSection(
+            totalIncome = totalIncome,
+            totalExpense = totalExpense,
+            totalBalance = totalBalance
+        )
 
-        // Expense Card
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFCDD2)), // Light red
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Total Expenses",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black
-                )
-                Text(
-                    text = "%.2f DZ".format(totalExpense),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFFF44336)
-                )
-            }
-        }
+        // Data visualization placeholder
+        DataVisualizationPlaceholder()
+    }
+}
 
-        // Balance Card
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFBBDEFB)), // Light blue
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Remaining Balance",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black
-                )
-                Text(
-                    text = "%.2f DZ".format(totalBalance),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1976D2)
-                )
-            }
-        }
+/**
+ * Section containing financial summary cards
+ *
+ * @param totalIncome Total income value
+ * @param totalExpense Total expenses value
+ * @param totalBalance Current balance value
+ */
+@Composable
+private fun FinancialCardsSection(
+    totalIncome: Double,
+    totalExpense: Double,
+    totalBalance: Double
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // Income card
+        FinancialCard(
+            titleRes = R.string.income_title,
+            amount = totalIncome,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            textColor = MaterialTheme.colorScheme.onPrimaryContainer
+        )
 
-        // Circle instead of Graph Placeholder
-        Box(
-            modifier = Modifier
-                .size(200.dp) // حجم الدائرة
-                .padding(vertical = 16.dp)
-                .clip(CircleShape) // قص إلى دائرة
-                .background(Color(0xFFE0E0E0)), // لون خلفية الدائرة
-            contentAlignment = Alignment.Center
+        // Expense card
+        FinancialCard(
+            titleRes = R.string.expense_title,
+            amount = totalExpense,
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            textColor = MaterialTheme.colorScheme.onErrorContainer
+        )
+
+        // Balance card
+        FinancialCard(
+            titleRes = R.string.balance_title,
+            amount = totalBalance,
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            textColor = MaterialTheme.colorScheme.onSecondaryContainer
+        )
+    }
+}
+
+/**
+ * Reusable financial card component
+ *
+ * @param titleRes String resource ID for card title
+ * @param amount Financial amount to display
+ * @param containerColor Background color of the card
+ * @param textColor Text color for the card content
+ */
+@Composable
+private fun FinancialCard(
+    titleRes: Int,
+    amount: Double,
+    containerColor: Color,
+    textColor: Color
+) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // Card title
             Text(
-                text = "Graph Here",
-                color = Color.Gray,
-                fontSize = 16.sp
+                text = stringResource(titleRes),
+                style = MaterialTheme.typography.titleLarge,
+                color = textColor
+            )
+
+            // Formatted amount
+            Text(
+                text = formatCurrency(amount),
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.ExtraBold,
+                color = textColor
             )
         }
     }
+}
+
+/**
+ * Placeholder for data visualization
+ */
+@Composable
+private fun DataVisualizationPlaceholder() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.surfaceVariant),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(R.string.analytics_placeholder),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/**
+ * Formats currency value with locale-appropriate formatting
+ *
+ * @param amount Currency amount to format
+ * @return Formatted currency string
+ */
+@Composable
+private fun formatCurrency(amount: Double): String {
+    return "%,.2f ${stringResource(R.string.currency)}".format(amount)
 }

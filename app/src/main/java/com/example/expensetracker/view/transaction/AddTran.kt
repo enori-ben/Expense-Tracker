@@ -1,3 +1,4 @@
+
 package com.example.expensetracker.view.transaction
 
 import android.os.Build
@@ -40,8 +41,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.expensetracker.data.CategoryGrid
 import com.example.expensetracker.repository.Routes
 
 

@@ -32,7 +32,7 @@ import com.example.expensetracker.R
 import com.example.expensetracker.navigation.NavItem
 import com.example.expensetracker.repository.Routes
 import com.example.expensetracker.view.DrawerScreen
-import com.example.expensetracker.view.Scanning
+import com.example.expensetracker.view.scan.Scanning
 import com.example.expensetracker.view.stats.StatsScreen
 import com.example.expensetracker.view.transaction.Transaction
 import com.example.expensetracker.view.transaction.TransactionViewModel
@@ -44,7 +44,11 @@ import kotlinx.coroutines.CoroutineScope
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(navController: NavController, transactionViewModel: TransactionViewModel) {
+
+    val totalBalance by transactionViewModel.totalBalance.collectAsStateWithLifecycle()
+
     val viewModel: MainViewModel = viewModel()
+
     val navItems = listOf(
         NavItem("Home", painterResource(R.drawable.home)),
         NavItem("Scan", painterResource(R.drawable.scanning)),
@@ -58,7 +62,10 @@ fun MainScreen(navController: NavController, transactionViewModel: TransactionVi
         drawerContent = {
             DrawerScreen(
                 onClose = { scope.launch { drawerState.close() } },
-                navController = navController
+                navController = navController,
+                totalBalance = totalBalance,
+                drawerState = drawerState, // إضافة هذه المعلمة
+                scope = scope // إضاإضافة هذه المعلمة
             )
         }
     ) {
@@ -107,7 +114,8 @@ fun MainScreen(navController: NavController, transactionViewModel: TransactionVi
                     scope = scope,
                     drawerState = drawerState
                 )
-                1 -> Scanning(navController)
+                1 -> Scanning(  onClose = { navController.navigate(Routes.MAIN_SCREEN) },
+                    onConfirm = {navController.navigate(Routes.MAIN_SCREEN) })
                 2 -> StatsScreen(navController,transactionViewModel)
             }
         }
@@ -123,6 +131,7 @@ private fun HomeScreenContent(
     scope: CoroutineScope,
     drawerState: DrawerState
 ) {
+
     val transactions by viewModel.transactions.collectAsStateWithLifecycle()
     val totalBalance by viewModel.totalBalance.collectAsStateWithLifecycle()
     val totalIncome by viewModel.totalIncome.collectAsStateWithLifecycle()
@@ -158,7 +167,7 @@ private fun HomeScreenContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F6FA))
+            .background(Color(0xD7020509))
     ) {
         Column(
             modifier = Modifier
@@ -234,21 +243,21 @@ private fun HeaderSection(
             Icon(
                 painter = painterResource(R.drawable.menu),
                 contentDescription = "Menu",
-                tint = Color(0xFF333333)
+                tint = Color.Black
             )
         }
 
-        Text(
-            text = "Total Balance",
-            style = MaterialTheme.typography.titleMedium,
-            color = Color(0xFF666666)
-        )
+//        Text(
+//            text = "Total Balance",
+//            style = MaterialTheme.typography.titleMedium,
+//            color = Color(0xFF666666)
+//        )
 
         IconButton(onClick = { navController.navigate(Routes.PROFILE_SCREEN) }) {
             Icon(
                 painter = painterResource(R.drawable.ic_profile),
                 contentDescription = "Profile",
-                tint = Color(0xFF333333)
+                tint = Color.Black
             )
         }
     }
@@ -349,7 +358,7 @@ private fun TransactionItem(transaction: Transaction) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .padding(vertical = 10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
@@ -371,7 +380,7 @@ private fun TransactionItem(transaction: Transaction) {
                 )
             }
             Text(
-                text = "${if (transaction.isExpense) "-" else "+"} %.2f DZ".format(transaction.amount),
+                text = "${if (transaction.isExpense) "-" else "+"} %,.2f DZD".format(transaction.amount),
                 color = if (transaction.isExpense) Color(0xFFF44336) else Color(0xFF4CAF50),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyLarge
@@ -444,14 +453,14 @@ private fun BalanceSummarySection(
     totalIncome: Double,
     totalExpense: Double
 ) {
-    Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 24.dp)) {
         Text(
             text = "Total Balance",
-            style = MaterialTheme.typography.titleMedium,
-            color = Color(0xFF666666)
+            style = MaterialTheme.typography.titleLarge,
+            color = Color.Black
         )
         Text(
-            text = "%.2f DZ".format(totalBalance),
+            text = "%,.2f DZD".format(totalBalance),
             style = MaterialTheme.typography.displaySmall.copy(
                 fontSize = 33.sp,
                 fontWeight = FontWeight.Bold,
@@ -462,7 +471,7 @@ private fun BalanceSummarySection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp),
+                .padding(vertical = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             IncomeExpenseItem("Income", totalIncome, Color(0xFF4CAF50))
@@ -473,11 +482,11 @@ private fun BalanceSummarySection(
 @Composable
 private fun IncomeExpenseItem(label: String, amount: Double, color: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(label, style = MaterialTheme.typography.bodyMedium)
+        Text(label, style = MaterialTheme.typography.titleLarge)
         Text(
-            "%.2f DZ".format(amount),
+            "%,.2f DZD".format(amount),
             color = color,
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleMedium
         )
     }
 }

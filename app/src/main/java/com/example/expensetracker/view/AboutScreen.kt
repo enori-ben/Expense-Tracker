@@ -53,7 +53,7 @@ fun AboutScreen(navController: NavController) { // تم إضافة NavController
         Spacer(modifier = Modifier.height(24.dp))
 
         Icon(
-            painter = painterResource(R.drawable.me),
+            painter = painterResource(R.drawable.logo),
             contentDescription = stringResource(R.string.app_icon), // إضافة وصف للوصولية
             tint = Color.Unspecified,
             modifier = Modifier.size(64.dp)
@@ -69,7 +69,7 @@ fun AboutScreen(navController: NavController) { // تم إضافة NavController
         )
 
         Text(
-            text = stringResource(R.string.app_version), // استخدام مورد النص للإصدار
+            text = stringResource(R.string.app_version),
             fontSize = 14.sp,
             color = Color.Gray
         )
