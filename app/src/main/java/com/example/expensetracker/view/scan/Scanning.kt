@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -94,13 +95,20 @@ import kotlinx.serialization.json.Json
 import java.io.ByteArrayOutputStream
 import java.io.File
 import kotlin.system.measureTimeMillis
+import androidx.navigation.NavController  // Import NavController
+import com.example.expensetracker.repository.Routes
+import com.example.expensetracker.view.transaction.TransactionViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Scanning(
     onClose: () -> Unit,
     onConfirm: () -> Unit,
-
-    ) {
+    viewModel: TransactionViewModel
+) {
     var hasPermission by remember { mutableStateOf(false) }
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
@@ -119,6 +127,7 @@ fun Scanning(
     if (hasPermission) {
         Box(modifier = Modifier.fillMaxSize()) {
             ProductScanningScreen(
+                viewModel = viewModel, // ✅ Pass ViewModel here
                 onClose = onClose,
                 onConfirm = onConfirm
             )
@@ -382,7 +391,8 @@ fun getBitmapSizeInMB(bitmap: Bitmap): Double {
 
 suspend fun extractDescriptionFromImage(
     bitmap: Bitmap,
-    onTextExtracted: (String) -> Unit
+    onTextExtracted: (String) -> Unit,
+    onInvoiceParsed: (InvoiceResult?) -> Unit
 ): String {
     val buildConfig = BuildConfig()
 
@@ -397,19 +407,22 @@ suspend fun extractDescriptionFromImage(
         image(cropedImage)
         text(
             """
+               Your response should be a clean, valid JSON matching the format above.
+                Do NOT include any markdown formatting like ```json or ```
             You are an intelligent invoice parser. Given the raw text extracted from an image, your task is to extract the following structured data from the invoice content only:
 
             Fields to extract:
-            date: The date of the invoice (format: dd/MM/yyyy or similar)
-            total: Final amount paid (e.g., "1000 DA")
+            date: The date of the invoice (format: yyyy-dd-MM or similar)
+            total: Final amount paid (e.g., "1000 DZD")
             type: Type of purchase, strictly from:
-            ["health", "food", "workout", "apparel", "education", "gifts", "transport", "other"]
+            ["Health", "Food", "Workout", "Apparel", "Education", "Gifts", "Transport", "Other"]
             
             items: A list of purchased items. Each item should contain:
             name: Item name or description
             quantity: Number of units purchased (if missing, assume 1)
-            price: Price per unit (as a number, e.g., 200.0)
-            
+            price: Price per unit (as a number, e.g., 200.00)
+            totalPrice: the Total price.
+
             vendor: A nested object with:
             name: Name of the vendor or store
             address: Address of the store (if not found, return empty string)
@@ -420,30 +433,28 @@ suspend fun extractDescriptionFromImage(
                 "name": "Fashion Store",
                 "address": "123 Rue Didouche Mourad, Algiers"
               },
-              "date": "15/04/2025",
+              "date": "2025-04-15",
               "total": "1000 DA",
-              "type": "apparel",
+              "type": "Apparel",
               "items": [
                 {
                   "name": "T-shirt",
                   "quantity": 2,
-                  "price": 300.0,
-                  "total_price": 600.0
+                  "price": 300.00,
+                  "totalPrice": 600.00
                 }
               ]
             }
 
             Important Instructions:
-            Focus only on the invoice (closest to the camera); ignore any surrounding or background text.
-            Use the final total amount paid, not subtotal or taxes.
-            Infer the type from item names, vendor name, or context. If unclear, default to "other".
-            If item quantity is missing, assume 1.
-            If vendor address is missing or unclear, return an empty string.
-            Your response should be a clean, valid JSON matching the format above.
+    - Your response must be pure JSON only
+    - Never use markdown formatting
+    - Date format must be yyyy-MM-dd
+    - If date parsing fails, use today's date
+    - Amounts should be numbers only (without currency symbols)
             """
         )
     }
-
     var extractedText = ""
     val timeTaken = measureTimeMillis {
         val response = generativeModel.generateContent(inputContent)
@@ -452,24 +463,29 @@ suspend fun extractDescriptionFromImage(
         onTextExtracted(extractedText)
     }
 
-    // Parse the extracted JSON text
-    val invoiceResult: InvoiceResult = try {
-        val parsed = Json.decodeFromString<InvoiceResult>(extractedText)
+    val invoiceResult: InvoiceResult? = try {
+        // تنظيف النص باستخدام regex
+        val jsonRegex = """(?s)\{.*\}""".toRegex()
+        val cleanedText = jsonRegex.find(extractedText)?.value?.let {
+            it.replace("```json", "")
+                .replace("```", "")
+                .trim()
+        } ?: extractedText
 
-        // حساب total_price لكل عنصر
-        val updatedItems = parsed.items.map {
-            it.copy(total_price = it.quantity * it.price)
-        }
+        val parsed = Json.decodeFromString<InvoiceResult>(cleanedText)
 
-        parsed.copy(items = updatedItems)
+        parsed.copy(items = parsed.items.map { item ->
+            item.copy(totalPrice = item.quantity * item.price)
+        })
 
     } catch (e: Exception) {
-        Log.e("JSON Parsing Error", e.toString())
-        InvoiceResult("", 0.0, "other", emptyList(), Vendor("", ""))
+        Log.e("JSON Parsing Error", "Error: ${e.message}\nText: $extractedText")
+        null
     }
 
-    // يمكنك الآن استخدام البيانات
-    Log.d("Parsed Invoice", "Date: ${invoiceResult.date}")
+    // تمرير النتيجة إلى callback
+    onInvoiceParsed(invoiceResult)
+
     return extractedText
 }
 
@@ -525,12 +541,34 @@ fun reduceBitmapSize(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
+fun tryParseDate(dateStr: String): LocalDate? {
+    val formatters = listOf(
+        DateTimeFormatter.ofPattern("yyyy-dd-MM"),
+        DateTimeFormatter.ofPattern("dd-MM-yyyy"),
+        DateTimeFormatter.ofPattern("MM/dd/yyyy")
+    )
+
+    for (formatter in formatters) {
+        try {
+            return LocalDate.parse(dateStr, formatter)
+        } catch (e: Exception) {
+            // continue
+        }
+    }
+    return null
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ProductScanningScreen(
+    viewModel: TransactionViewModel,
     onClose: () -> Unit,
     onConfirm: () -> Unit
 ) {
     var extractedText by remember { mutableStateOf("") }
+    var invoiceResult by remember { mutableStateOf<InvoiceResult?>(null) }
     var isLoading by remember { mutableStateOf(false) }
     var showConfirmationDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -549,14 +587,23 @@ fun ProductScanningScreen(
                 coroutineScope.launch {
                     if (bitmap != null) {
                         try {
-                            extractDescriptionFromImage(bitmap) { text ->
-                                extractedText = (text).toString()
-                                isLoading = false
-                                showConfirmationDialog = true
-                            }
+                            extractDescriptionFromImage(
+                                bitmap,
+                                onTextExtracted = { text ->
+                                    extractedText = text
+                                },
+                                onInvoiceParsed = { parsedInvoice -> // Receive parsed invoice data
+                                    invoiceResult = parsedInvoice
+                                    isLoading = false
+                                    showConfirmationDialog = true
+                                }
+                            )
                         } catch (e: Exception) {
-                            Log.e("gemini", "Product Extraction Failed! Please try again")
+                            Log.e("gemini", "Product Extraction Failed! Please try again",e)
+                            isLoading = false // Ensure loading is stopped on error
                         }
+                    } else {
+                        isLoading = false // Handle null bitmap case
                     }
                 }
             },
@@ -593,7 +640,7 @@ fun ProductScanningScreen(
 
         AlertDialog(
             onDismissRequest = { showConfirmationDialog = false },
-            title = { Text("Confirm Product Description") },
+            title = { Text("Confirm Invoice Details") },
             text = {
                 Column {
                     capturedImageUri?.let { uri ->
@@ -611,26 +658,46 @@ fun ProductScanningScreen(
 
                     OutlinedTextField(
                         value = editedText,
-                        onValueChange = {
-                            if (it.all { char -> char.isDigit() } || it.isEmpty()) {
-                                editedText = it
-                            }
-                        },
+                        onValueChange = { editedText = it }, // Capture change event of the edit text.
                         label = { Text("Product Description") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         singleLine = false,
                         modifier = Modifier.fillMaxWidth()
                     )
-
+//                    if (editedText.length in 9..11) {
+//                        Text(
+//                            "Licence plate should be 9-11 digits",
+//                            color = Color.Red,
+//                            style = MaterialTheme.typography.bodySmall,
+//                            modifier = Modifier.padding(top = 4.dp)
+//                        )
+//                    }
 
                 }
             },
             confirmButton = {
                 Button(
                     onClick = {
+                        invoiceResult?.let { result ->
+                            val parsedDate = tryParseDate(result.date) ?: LocalDate.now()
+                            val safeTotal = result.total.takeIf { it > 0 } ?: run {
+                                result.items.sumOf { it.totalPrice }
+                            }
+
+                            viewModel.addTransaction(
+                                amount = safeTotal,
+                                isExpense = true,
+                                category = result.type,
+                                date = parsedDate,
+                                manualDescription = editedText, // Pass the manual description
+                                invoiceDetails = result // Pass the structured invoice details
+
+
+                            )
+                        }
                         showConfirmationDialog = false
                         onConfirm()
-                    },
+                    }
                 ) {
                     Text("Confirm")
                 }
@@ -640,6 +707,7 @@ fun ProductScanningScreen(
                     onClick = {
                         showConfirmationDialog = false
                         capturedImageUri = null
+                        invoiceResult = null
                     }
                 ) {
                     Text("Retake")
@@ -647,4 +715,18 @@ fun ProductScanningScreen(
             }
         )
     }
+}
+
+private fun buildInvoiceDetails(result: InvoiceResult): String {
+    return """
+        Vendor: ${result.vendor.name}
+        Address: ${result.vendor.address}
+        Date: ${result.date}
+        Total: ${result.total} DZD
+        Type: ${result.type}
+        Items:
+        ${result.items.joinToString("\n") {
+        "- ${it.name} (${it.quantity} x ${it.price} = ${it.totalPrice})"
+    }}
+    """.trimIndent()
 }

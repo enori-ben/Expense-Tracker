@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,6 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberDatePickerState
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -32,19 +36,17 @@ import com.example.expensetracker.R
 import com.example.expensetracker.navigation.NavItem
 import com.example.expensetracker.repository.Routes
 import com.example.expensetracker.view.DrawerScreen
-<<<<<<< HEAD
 import com.example.expensetracker.view.scan.Scanning
-=======
->>>>>>> 242b99d42569f9ea70fc42011200e9663bb41699
 import com.example.expensetracker.view.stats.StatsScreen
 import com.example.expensetracker.view.transaction.Transaction
 import com.example.expensetracker.view.transaction.TransactionViewModel
-import com.example.policeplus.views.Scanning
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.CoroutineScope
-import java.time.DayOfWeek
+import java.util.UUID
+import java.time.ZoneId
+import java.time.Instant
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -119,16 +121,14 @@ fun MainScreen(navController: NavController, transactionViewModel: TransactionVi
                     scope = scope,
                     drawerState = drawerState
                 )
-<<<<<<< HEAD
-                1 -> Scanning(  onClose = { navController.navigate(Routes.MAIN_SCREEN) },
-                    onConfirm = {navController.navigate(Routes.MAIN_SCREEN) })
-=======
+
                 1 -> Scanning(
                     onClose = { navController.navigate(Routes.MAIN_SCREEN) },
-                    onConfirm = {navController.navigate(Routes.MAIN_SCREEN) }
+                    onConfirm = { navController.navigate(Routes.MAIN_SCREEN) },
+                    viewModel = transactionViewModel
                 )
->>>>>>> 242b99d42569f9ea70fc42011200e9663bb41699
-                2 -> StatsScreen(navController,transactionViewModel)
+
+                2 -> StatsScreen(navController, transactionViewModel)
             }
         }
     }
@@ -149,11 +149,6 @@ private fun HomeScreenContent(
     val totalIncome by viewModel.totalIncome.collectAsStateWithLifecycle()
     val totalExpense by viewModel.totalExpense.collectAsStateWithLifecycle()
 
-    // Debugging logs
-    LaunchedEffect(transactions) {
-        println("MainScreen - Transactions updated: ${transactions.size}")
-    }
-
     var selectedPeriod by remember { mutableStateOf("Day") }
     var currentDate by remember { mutableStateOf(LocalDate.now()) }
 
@@ -164,13 +159,15 @@ private fun HomeScreenContent(
         when (selectedPeriod) {
             "Day" -> transactions.filter { it.date == currentDate }
             "Week" -> {
-                val startOfWeek = currentDate.with(DayOfWeek.MONDAY)
+                val startOfWeek = currentDate.with(java.time.DayOfWeek.MONDAY)
                 val endOfWeek = startOfWeek.plusDays(6)
                 transactions.filter { it.date in startOfWeek..endOfWeek }
             }
+
             "Month" -> transactions.filter {
                 it.date.year == currentDate.year && it.date.month == currentDate.month
             }
+
             "Year" -> transactions.filter { it.date.year == currentDate.year }
             else -> transactions
         }
@@ -221,22 +218,24 @@ private fun HomeScreenContent(
                     }
                 } else {
                     items(filteredTransactions.reversed()) { transaction ->
-                        TransactionItem(transaction)
+                        TransactionItem(transaction = transaction) {
+                            navController.navigate("${Routes.TRANSACTION_DETAIL}/${transaction.id}")
+                        }
                     }
                 }
             }
         }
 
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 600.dp)){
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 600.dp)
+        ) {
             // Floating Action Button
             FAB(navController)
         }
     }
 }
-
-
 
 @Composable
 private fun HeaderSection(
@@ -260,12 +259,6 @@ private fun HeaderSection(
                 tint = Color.Black
             )
         }
-
-//        Text(
-//            text = "Total Balance",
-//            style = MaterialTheme.typography.titleMedium,
-//            color = Color(0xFF666666)
-//        )
 
         IconButton(onClick = { navController.navigate(Routes.PROFILE_SCREEN) }) {
             Icon(
@@ -319,6 +312,7 @@ private fun PeriodSelector(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun DateNavigation(
@@ -327,6 +321,11 @@ private fun DateNavigation(
     dailyFormatter: DateTimeFormatter,
     onDateChanged: (LocalDate) -> Unit
 ) {
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    )
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -343,7 +342,9 @@ private fun DateNavigation(
             )
         }
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.clickable { showDatePicker = true } //Make the date clickable
+        ) {
             Text(
                 text = currentDate.format(dateFormatter),
                 style = MaterialTheme.typography.titleMedium,
@@ -364,15 +365,56 @@ private fun DateNavigation(
             )
         }
     }
+    IconButton(
+        onClick = { showDatePicker = true },
+        modifier = Modifier.size(48.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.CalendarMonth,
+            contentDescription = "Select Date",
+            tint = Color(0xFF070000)
+        )
+    }
+
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDatePicker = false
+                    datePickerState.selectedDateMillis?.let { millis ->
+                        val instant = Instant.ofEpochMilli(millis)
+                        val newDate = instant.atZone(ZoneId.systemDefault()).toLocalDate()
+                        onDateChanged(newDate)
+                    }
+                }) {
+                    Text("Confirm")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(
+                state = datePickerState,
+                title = { Text(text = "Select Day",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(16.dp)) }
+            )
+        }
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun TransactionItem(transaction: Transaction) {
+private fun TransactionItem(transaction: Transaction, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp),
+            .padding(vertical = 10.dp)
+            .clickable { onClick() },  //Make clickable
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
@@ -394,14 +436,24 @@ private fun TransactionItem(transaction: Transaction) {
                 )
             }
             Text(
-                text = "${if (transaction.isExpense) "-" else "+"} %,.2f DZD".format(transaction.amount),
+                text = "${if (transaction.isExpense) "-" else "+"} %.2f DZD".format(transaction.amount),
                 color = if (transaction.isExpense) Color(0xFFF44336) else Color(0xFF4CAF50),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyLarge
             )
         }
+
+//            if (transaction.invoiceDetails.isNotEmpty()) {
+//                Spacer(modifier = Modifier.height(8.dp))
+//                Text(
+//                    text = transaction.invoiceDetails,
+//                    style = MaterialTheme.typography.bodySmall,
+//                    color = Color.Gray
+//                )
+//            }
     }
 }
+
 
 @Composable
 fun PeriodChip(text: String, isSelected: Boolean, onSelect: () -> Unit) {
@@ -432,6 +484,7 @@ fun PeriodChip(text: String, isSelected: Boolean, onSelect: () -> Unit) {
         )
     }
 }
+
 @Composable
 fun FAB(navController: NavController) {
 
@@ -458,9 +511,8 @@ fun FAB(navController: NavController) {
     }
 
 
-
-
 }
+
 
 @Composable
 private fun BalanceSummarySection(
@@ -472,7 +524,7 @@ private fun BalanceSummarySection(
         Text(
             text = "Total Balance",
             style = MaterialTheme.typography.titleLarge,
-            color = Color.Black
+            color = Color.White
         )
         Text(
             text = "%,.2f DZD".format(totalBalance),
@@ -494,12 +546,17 @@ private fun BalanceSummarySection(
         }
     }
 }
+
 @Composable
 private fun IncomeExpenseItem(label: String, amount: Double, color: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(label, style = MaterialTheme.typography.titleLarge)
         Text(
-            "%,.2f DZD".format(amount),
+            text = label,
+            style = MaterialTheme.typography.titleLarge,
+            color = Color.White // ← أضف هذا السطر لتحديد اللون الأبيض
+        )
+        Text(
+            text = "%,.2f DZD".format(amount),
             color = color,
             style = MaterialTheme.typography.titleMedium
         )

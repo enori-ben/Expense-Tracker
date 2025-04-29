@@ -129,7 +129,7 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.24" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 dagger-hilt-plugin = {id = "com.google.dagger.hilt.android", version.ref = "hiltVersion"}
 kotlin-kapt = {id = "org.jetbrains.kotlin.kapt" , version.ref = "kaptVersion"}

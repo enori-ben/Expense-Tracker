@@ -6,8 +6,6 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.serialization)
     alias(libs.plugins.google.services)
-
-
 }
 
 android {
@@ -34,15 +32,21 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_11 //Changed to JavaVersion 11
+        targetCompatibility = JavaVersion.VERSION_11 //Changed to JavaVersion 11
     }
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs = freeCompilerArgs + "-Xdebug"
     }
+
     buildFeatures {
         compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
 }
 
@@ -134,5 +138,4 @@ dependencies {
     implementation("com.google.firebase:firebase-database-ktx:21.0.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("com.google.accompanist:accompanist-permissions:0.31.5-beta")
-
 }

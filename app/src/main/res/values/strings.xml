@@ -67,7 +67,8 @@
     <string name="privacy_note">All financial data remains encrypted and private</string>
 
 
-
+    <string name="invalid_date">Invalid date format</string>
+    <string name="invalid_item_values">Invalid item values</string>
 
 
 

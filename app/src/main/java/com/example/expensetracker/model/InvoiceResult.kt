@@ -1,3 +1,4 @@
+@file:Suppress("PLUGIN_IS_NOT_ENABLED")
 
 package com.example.expensetracker.model
 
@@ -18,10 +19,11 @@ data class InvoiceResult(
     val items: List<InvoiceItem>,
     val vendor: Vendor
 )
+
 @Serializable
 data class InvoiceItem(
     val name: String,
-    val quantity: Int,
+    val quantity: Double, // Changed type to Double
     val price: Double,
-    val total_price: Double
+    val totalPrice: Double
 )

@@ -1,4 +1,3 @@
-
 package com.example.expensetracker.view.transaction
 
 import android.os.Build
@@ -38,9 +37,13 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import com.example.expensetracker.repository.Routes
 
 
@@ -68,14 +71,9 @@ fun AddTran(navController: NavController, viewModel: TransactionViewModel) {
     ) {
         // Header Section
         Card(
-            shape = RoundedCornerShape(40.dp),
-
-            colors = CardDefaults.cardColors(
-                containerColor = Color(0xFF1A180A)
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(180.dp)
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp),
+            elevation = CardDefaults.cardElevation(10.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -95,12 +93,32 @@ fun AddTran(navController: NavController, viewModel: TransactionViewModel) {
                         tint = Color.White
                     )
                 }
+//
+//                Text(
+//                    "Add Transaction",
+//                    fontSize = 32.sp,
+//                    fontWeight = FontWeight.Bold,
+//                    color = Color.White,
+//                    style = TextStyle(
+//                        shadow = Shadow(
+//                            color = Color.Black.copy(alpha = 0.4f),
+//                            offset = Offset(0f, 10f),
+//                            blurRadius = 8f
+//                        )
+//                    )
+//                )
 
                 Text(
                     "Add Transaction",
-
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(start = 80.dp),
+                    fontSize = 25.sp,
+                    style = TextStyle(
+                        shadow = Shadow(
+                            color = Color.Black.copy(alpha = 0.4f),
+                            offset = Offset(0f, 10f),
+                            blurRadius = 8f
+                        )
+                    ),
+                    modifier = Modifier.padding(start = 65.dp),
                     color = Color.White
                 )
             }
@@ -205,7 +223,8 @@ fun AddTran(navController: NavController, viewModel: TransactionViewModel) {
             CategoryGrid(
                 categories = categories,
                 selectedCategory = selectedCategory,
-                onCategorySelected = { selectedCategory = it
+                onCategorySelected = {
+                    selectedCategory = it
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -353,7 +372,7 @@ fun DateSelector(
                 state = datePickerState,
                 title = {
                     Text(
-                        "اختر التاريخ",
+                        "",
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(16.dp)
                     )

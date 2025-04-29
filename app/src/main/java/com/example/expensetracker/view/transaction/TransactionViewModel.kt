@@ -1,8 +1,8 @@
-
 package com.example.expensetracker.view.transaction
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.example.expensetracker.model.InvoiceResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -14,7 +14,10 @@ data class Transaction(
     val amount: Double,
     val isExpense: Boolean,
     val category: String,
-    val date: LocalDate
+    val date: LocalDate,
+    val vendorName: String = "", // Added vendor name
+    val manualDescription: String = "", // Store the manually entered description
+    val invoiceDetails: InvoiceResult? = null // Store the structured invoice result
 )
 
 
@@ -45,7 +48,10 @@ class TransactionViewModel(
         amount: Double,
         isExpense: Boolean,
         category: String,
-        date: LocalDate
+        date: LocalDate,
+        vendorName: String = "", // Vendor Name
+        manualDescription: String = "", // Get manual description
+        invoiceDetails: InvoiceResult? = null //  Get structured invoice result
     ) {
         if (amount <= 0) {
             println("TransactionViewModel - Error: Amount must be positive")
@@ -56,7 +62,9 @@ class TransactionViewModel(
             amount = amount,
             isExpense = isExpense,
             category = if (isExpense) category else "Income",
-            date = date
+            date = date,
+            vendorName = vendorName,  // Save vendor name
+            invoiceDetails = invoiceDetails  // Save invoice details
         )
 
         println("TransactionViewModel - Adding transaction: $transaction")
