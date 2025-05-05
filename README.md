@@ -57,10 +57,11 @@ Expense Tracker is built using cutting-edge Android development technologies:
 
 ## 📱 Screenshots
 
-Check out how Expense Tracker looks in action:
-not yet
+* Check out how Expense Tracker looks in action:
 
-📌 Future Improvements
+**not yet**
+
+## 📌 Future Improvements
 
 *   **Monthly and Historical Bar Charts**: Enhance the analytics section with more detailed views of spending trends over time.
 *   **Budgeting Features**: Allow users to set spending limits for categories and track their progress.
