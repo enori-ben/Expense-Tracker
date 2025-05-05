@@ -1,5 +1,7 @@
-💰 Expense Tracker - Smart Personal Finance Manager
-App Logo
+# 💰 Expense Tracker - Smart Personal Finance Manager
+
+[![Kotlin Version](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg)](https://kotlinlang.org)
+[![Compose Version](https://img.shields.io/badge/Jetpack%20Compose-1.10.0-brightgreen)](https://developer.android.com/jetpack/compose)
 
 A modern Android app for tracking expenses, scanning receipts with AI, and gaining financial insights. Built with Jetpack Compose and Firebase.
 
