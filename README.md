@@ -55,7 +55,7 @@ Expense Tracker is a modern Android application that helps users effortlessly ma
 |--------------------|-----------------|---------|
 | ![Detail](screenshots/detail.png) | ![Add](screenshots/add.png) | ![Profile](screenshots/profile.png) |
 
-## 🚀 Getting Started
+## Installation & Setup 🚀
 
 ### Prerequisites
 - Android Studio Ladybug Feature Drop (2025.04.01)
@@ -74,4 +74,32 @@ Expense Tracker is a modern Android application that helps users effortlessly ma
 3. **Build and Run**
     - Click the ▶️ Run button in Android Studio
     - Choose a connected device or emulator
+
+## Contributing 🤝
+We welcome contributions! Please follow these guidelines:
+
+1. **Fork the repository**
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Commit changes**
+    - Follow Conventional Commits format
+    - Example: `feat: add user registration screen`
+4. **Push and create Pull Request**
+    - Ensure code follows Kotlin style guide
+    - Include test coverage for new features
+    - Update documentation when applicable
+
+### Code Style
+- Use meaningful variable names
+- Follow official Kotlin coding conventions
+- Keep composables small and focused
+- Use ViewModel for business logic
+
+## License 📄
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📞 Contact
+For any inquiries, feel free to contact **EnNori** at enoridz11@gmail.com
 
