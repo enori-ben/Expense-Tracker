@@ -1,121 +1,77 @@
-# 💰 Expense Tracker - Smart Personal Finance Manager
+# 💰 Expense Tracker - AI-Powered Finance Manager
 
-[![Kotlin Version](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg)](https://kotlinlang.org)
-[![Compose Version](https://img.shields.io/badge/Jetpack%20Compose-1.10.0-brightgreen)](https://developer.android.com/jetpack/compose)
+![App Logo](app/src/main/res/drawable/logo.png)
 
-A modern Android app for tracking expenses, scanning receipts with AI, and gaining financial insights. Built with Jetpack Compose and Firebase.
+Expense Tracker is a modern Android application that helps users effortlessly manage their personal finances. With AI-powered receipt scanning and beautiful data visualizations, it transforms financial tracking into a seamless experience.
 
-✨ Key Features
-📊 Financial Management
-Add/edit transactions with categories (Food, Transport, Health, etc.)
+## 🌟 Key Features
 
-View balance summary with income/expense breakdown
+### 📊 Smart Transaction Management
+- **Add/Edit Transactions**: Log income and expenses with ease
+- **Detailed Categorization**: 8+ categories (Food, Health, Transport, etc.)
+- **Balance Overview**: Real-time view of total balance, income & expenses
+- **Period Filters**: View by day, week, month, or year
 
-Transaction history with filtering (day/week/month/year)
+### 🔍 AI Receipt Scanning (Powered by Google Gemini)
+- **Camera Integration**: Scan receipts with CameraX
+- **Auto Data Extraction**: Extracts vendor, amount, date, and items
+- **Smart Categorization**: Automatically classifies expenses
+- **Invoice Parsing**: Converts receipts to structured JSON data
 
-🔍 AI-Powered Receipt Scanning
-Camera integration for invoice capture
+### 📈 Interactive Analytics
+- **Pie Charts**: Visualize spending distribution
+- **Category Breakdown**: Understand spending habits
+- **Historical Data**: Track financial trends over time
 
-Google Gemini AI extracts:
+### 🔒 Secure Cloud Sync
+- **Firebase Authentication**: Email & Google sign-in
+- **Real-time Sync**: Cloud Firestore keeps data updated across devices
+- **Encrypted Storage**: Financial data protected at rest
 
-Vendor details (name, address)
+## 🛠 Technical Stack
 
-Transaction date & total amount
+### Frontend
+- **100% Jetpack Compose** - Modern declarative UI
+- **CameraX** - For receipt scanning
+- **ViewModel & Coroutines** - State management
+- **Navigation Compose** - Screen transitions
 
-Itemized purchases with quantities/prices
+### Backend
+- **Firebase Auth** - Secure authentication
+- **Cloud Firestore** - NoSQL database
+- **Firebase Storage** - Receipt image storage
 
-Automatic category assignment
+### AI Integration
+- **Google Gemini API** - For receipt parsing
+- **Custom JSON Parser** - Structured data extraction
 
-📈 Data Visualization
-Interactive pie charts for spending categories
+## 📱 Screenshots
 
-Monthly expense trends with bar charts
+| Home Screen | Receipt Scanning | Analytics |
+|-------------|------------------|-----------|
+| ![Home](screenshots/home.png) | ![Scan](screenshots/scan.png) | ![Stats](screenshots/stats.png) |
 
-Balance history tracking
+| Transaction Detail | Add Transaction | Profile |
+|--------------------|-----------------|---------|
+| ![Detail](screenshots/detail.png) | ![Add](screenshots/add.png) | ![Profile](screenshots/profile.png) |
 
-☁️ Cloud Sync & Security
-Firebase Authentication (Email/Google)
+## 🚀 Getting Started
 
-Real-time sync with Cloud Firestore
+### Prerequisites
+- Android Studio Ladybug Feature Drop (2025.04.01)
+- Android SDK 33+
+- Kotlin 2.0.0
 
-Encrypted data storage
+### Steps
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/enori-ben/Expense-Tracker.git
+   ```
+2. **Open in Android Studio**
+    - Select "Open an Existing Project"
+    - Choose the cloned directory
 
-🛠️ Technical Stack
-Frontend:
-
-Jetpack Compose (Modern UI)
-
-CameraX (Image Capture)
-
-ViewModel + Coroutines (State Management)
-
-Navigation Compose
-
-Backend:
-
-Firebase Authentication
-
-Cloud Firestore (NoSQL Database)
-
-AI Integration:
-
-Google Gemini API (Text extraction)
-
-JSON parsing for structured data
-
-📸 Screenshots
-Home Screen	Receipt Scanning	Statistics
-Home	Scan	Stats
-🚀 Installation
-Clone the repository:
-
-bash
-git clone https://github.com/enori-ben/Expense-Tracker.git
-Open in Android Studio
-
-Firebase Setup:
-
-Add your google-services.json to app/ folder
-
-Enable Email/Google authentication in Firebase Console
-
-Configure API Key:
-Add Gemini API key in local.properties:
-
-API_KEY=your_api_key_here
-Build and run the app
-
-🔮 Future Roadmap
-Budget planning system
-
-Recurring transactions
-
-PDF/Excel report generation
-
-Multi-currency support
-
-Biometric authentication
-
-🤝 Contributing
-We welcome contributions! Please:
-
-Fork the repository
-
-Create a feature branch
-
-Submit a pull request
-
-Follow Kotlin coding conventions and:
-
-Keep composables modular
-
-Use ViewModel for business logic
-
-Add tests for new features
-
-📄 License
-MIT License - See LICENSE for details
-
-📧 Contact
-EnNori - enoridz11@gmail.com
+3. **Build and Run**
+    - Click the ▶️ Run button in Android Studio
+    - Choose a connected device or emulator
 
