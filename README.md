@@ -1,4 +1,6 @@
-# 💰 Expense Tracker - AI-Powered Finance Manager
+# 💰 AI-powered Expense Tracker with Smart Receipt Scanning using Google Gemini API and OCR integration
+
+
 
 [![Kotlin Version](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg)](https://kotlinlang.org)
 [![Compose Version](https://img.shields.io/badge/Jetpack%20Compose-1.10.0-brightgreen)](https://developer.android.com/jetpack/compose)
