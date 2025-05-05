@@ -1,5 +1,4 @@
-# 💰 AI-powered Expense Tracker with Smart Receipt Scanning using Google Gemini API and OCR integration
-
+# 💰 Expense Tracker
 
 
 [![Kotlin Version](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg)](https://kotlinlang.org)
@@ -7,7 +6,7 @@
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?logo=firebase\&logoColor=black\&style=flat-square)](https://firebase.google.com/)
 [![Google Gemini API](https://img.shields.io/badge/Google%20Gemini-4285F4?logo=google\&logoColor=white\&style=flat-square)](https://gemini.google.com/)
 
-Effortlessly manage your personal finances with Expense Tracker, a modern Android app built with Jetpack Compose and powered by Firebase. Track your income and expenses, visualize your spending habits, and even scan physical receipts using Google Gemini's AI for automatic data entry!
+ AI-powered Expense Tracker with Smart Receipt Scanning using Google Gemini API and OCR integration
 
 ## 🌟 Key Features
 
