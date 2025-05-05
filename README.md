@@ -1,6 +1,7 @@
 # 💰 Expense Tracker - AI-Powered Finance Manager
 
-![App Logo](app/src/main/res/drawable/logo.png)
+[![Kotlin Version](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg)](https://kotlinlang.org)
+[![Compose Version](https://img.shields.io/badge/Jetpack%20Compose-1.10.0-brightgreen)](https://developer.android.com/jetpack/compose)
 
 Expense Tracker is a modern Android application that helps users effortlessly manage their personal finances. With AI-powered receipt scanning and beautiful data visualizations, it transforms financial tracking into a seamless experience.
 
