@@ -73,8 +73,5 @@ Expense Tracker is built using cutting-edge Android development technologies:
 *   **Multi-currency Support**: Add the ability to handle transactions in different currencies.
 *   
 ## 📞 Contact
-For any inquiries or feedback, feel free to contact the project author:
-
-*   **EnNori** at [enoridz11@gmail.com](mailto:enoridz11@gmail.com)
-
+For any inquiries, feel free to contact **EnNori**  at [enoridz11@gmail.com](mailto:enoridz11@gmail.com)
 ---
